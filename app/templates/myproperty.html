@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='myproperty.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('properties.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo3.png') }}" alt="EaseEstate Logo">
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('properties.sale') }}">Buy</a></li>
+                <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('properties.post_sale') }}">Sell</a></li>
+                        <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('properties.agents') }}">Agent</a></li>
+                <li><a href="{{ url_for('properties.blogs') }}">Blogs</a></li>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                    {% if user and user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                    {% endif %}
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                        {% if user and user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                        {% endif %}
+                           
+                        </li>
+                        <li><a href="{{ url_for('properties.profile') }}">My Profile</a></li>
+                        <li><a href="{{ url_for('properties.myproperties') }}">My Ads</a></li>
+                        <li><a href="{{ url_for('chat.inbox') }}">Inbox</a></li> 
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="seller-dashboard">
+        <h1>Your Listed Properties</h1>
+
+        <!-- Listed Properties -->
+        <div class="property-list">
+            {% if properties %}
+                {% for property in properties %}
+                    <div class="property-card">
+                        <img src="{{ url_for('static', filename='uploads/' + property.image) }}" alt="Property Image">
+                        <div class="property-details">
+                            <h3>{{ property.title }}</h3>
+                            <p><strong>Price:</strong> {{ property.price }}</p>
+                            <p><strong>Location:</strong> {{ property.location }}</p>
+                            <p><strong>Type:</strong> {{ property.type }}</p>
+                            <p><strong>Size:</strong> {{ property.size }}</p>
+                        </div>
+                        <div class="property-actions">
+                            <a href="{{ url_for('properties.update_property', id=property.id) }}" class="btn update-btn">Update</a>
+                            <form method="POST" action="{{ url_for('properties.delete_property', id=property.id) }}">
+                                <button type="submit" class="btn remove-btn">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-properties">
+                    <img src="{{ url_for('static', filename='img/X.png') }}" alt="No properties">
+                    <h3>No Properties Listed</h3>
+                    <p>You haven't listed any properties yet. <a href="{{ url_for('properties.add_sale') }}">Post your first ad</a></p>
+                </div>
+            {% endif %}
+        </div>
+        
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+                <li><a href="{{ url_for('properties.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('properties.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('properties.terms') }}">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='nav.js') }}"> </script>
+    <script>
+
+          // Profile dropdown functionality
+          const profileDropdown = document.querySelector('.profile-dropdown');
+          const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+      
+          profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+          });
+      
+          document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+          });
+      
+          profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+          });
+        // Seller Dashboard JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fetch properties from database (mock data for demonstration)
+            fetchSellerProperties();
+
+        });
+
+        // Function to fetch seller's properties from database
+        // Helper function to show messages
+        function showMessage(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification success';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Helper function to show errors
+        function showError(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification error';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

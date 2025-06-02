@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agents - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='agent.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('properties.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo3.png') }}" alt="EaseEstate Logo">
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('properties.sale') }}">Buy</a></li>
+                <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('properties.post_sale') }}">Sell</a></li>
+                        <li><a href="{{ url_for('properties.add_rent') }}">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('properties.agents') }}">Agent</a></li>
+                <li><a href="{{ url_for('properties.blogs') }}">Blogs</a></li>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                    {% if user and user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                    {% endif %}
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                        {% if user and user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                        {% endif %}
+                           
+                        </li>
+                        <li><a href="{{ url_for('properties.profile') }}">My Profile</a></li>
+                        <li><a href="{{ url_for('properties.myproperties') }}">My Ads</a></li>
+                        <li><a href="{{ url_for('chat.inbox') }}">Inbox</a></li> 
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="agent-page">
+        <h1>Property Agents</h1>
+
+        <!-- Rawalpindi Agents -->
+        <div class="city-section">
+            <h2>Rawalpindi</h2>
+            <div class="agent-grid">
+                <!-- Agent 1 -->
+                <div class="agent-card">
+                    <img src="{{ url_for('static', filename='img/agent1.jpeg') }}" alt="Agent Image">
+                    <div class="agent-details">
+                        <h3>Kaif</h3>
+                        <p><strong>Contact:</strong> +92 300 1234567</p>
+                        <p><strong>Email:</strong> Abdulrehman@gmail.com</p>
+                        <p><strong>Experience:</strong> 5 years</p>
+                    </div>
+                </div>
+
+                <!-- Agent 2 -->
+                <div class="agent-card">
+                    <img src="{{ url_for('static', filename='img/agent2.jpg') }}" alt="Agent Image">
+                    <div class="agent-details">
+                        <h3>Sara Ahmed</h3>
+                        <p><strong>Contact:</strong> +92 300 7654321</p>
+                        <p><strong>Email:</strong> sara.ahmed@gmail.com</p>
+                        <p><strong>Experience:</strong> 7 years</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Peshawar Agents -->
+        <div class="city-section">
+            <h2>Faislabad</h2>
+            <div class="agent-grid">
+                <!-- Agent 1 -->
+                <div class="agent-card">
+                    <img src="{{ url_for('static', filename='img/agentb.jpg') }}" alt="Agent Image">
+                    <div class="agent-details">
+                        <h3>Muhammad Bakar</h3>
+                        <p><strong>Contact:</strong> +92 300 1122334</p>
+                        <p><strong>Email:</strong> bakaransari686@gmail.com</p>
+                        <p><strong>Experience:</strong> 4 years</p>
+                    </div>
+                </div>
+
+                <!-- Agent 2 -->
+                <div class="agent-card">
+                    <img src="{{ url_for('static', filename='img/agentc.jpeg') }}" alt="Agent Image">
+                    <div class="agent-details">
+                        <h3>Maryam Khan</h3>
+                        <p><strong>Contact:</strong> +92 300 4433221</p>
+                        <p><strong>Email:</strong> fatima.khan@gmail.com</p>
+                        <p><strong>Experience:</strong> 6 years</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+                <li><a href="{{ url_for('properties.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('properties.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('properties.terms') }}">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
+    <script>
+        // ----------------Profile dropdown functionality
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+
+        // Toggle profile dropdown when clicking on profile icon
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from reaching document
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    </script>
+</body>
+</html>

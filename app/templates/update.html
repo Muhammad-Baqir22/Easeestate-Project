@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Property - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='update.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='img/logo3.png') }}" alt="EaseEstate Logo">
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('properties.sale') }}">Buy</a></li>
+                <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('properties.post_sale') }}">Sell</a></li>
+                        <li><a href="{{ url_for('properties.add_rent') }}">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('properties.agents') }}">Agent</a></li>
+                <li><a href="{{ url_for('properties.blogs') }}">Blogs</a></li>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                        <img src="{{ url_for('static', filename='img/profilelogo.png') }}" alt="Profile Icon">
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                            <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Profile Picture">
+                           
+                        </li>
+                        <li><a href="{{ url_for('properties.profile') }}">My Profile</a></li>
+                        <li><a href="{{ url_for('properties.myproperties') }}">My Ads</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="update-property-page">
+        <h1>Update Property</h1>
+
+        <!-- Property Images -->
+        <div class="property-images">
+            <h2>Property Images</h2>
+            <div class="image-grid">
+                <!-- Existing Images -->
+                <div class="image-card">
+                    <img src="img/property1.jpg" alt="Property Image">
+                    <button class="btn delete-btn">Delete</button>
+                </div>
+                <div class="image-card">
+                    <img src="img/property2.jpg" alt="Property Image">
+                    <button class="btn delete-btn">Delete</button>
+                </div>
+                <!-- Add New Image -->
+                <div class="image-card upload-card">
+                    <label for="upload-image">
+                        <span>+</span>
+                        <p>Upload New Image</p>
+                    </label>
+                    <input type="file" id="upload-image" accept="image/*" style="display: none;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Property Details Form -->
+        <form class="property-form" method="POST" action="{{ url_for('properties.update_property', id=property.id) }}">
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" placeholder="Enter updated price" value="{{ property.price }}">
+            </div>
+        
+            <!-- Location -->
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="Enter updated location" value="{{ property.location }}">
+            </div>
+        
+            <!-- Property Type -->
+            <div class="form-group">
+                <label>Type of Property</label>
+                <div class="checkbox-group">
+                    {% set selected_types = property.property_type.split(',') %}
+                    <label><input type="checkbox" name="property_type" value="plot" {% if 'plot' in selected_types %}checked{% endif %}> Plot</label>
+                    <label><input type="checkbox" name="property_type" value="house" {% if 'house' in selected_types %}checked{% endif %}> House</label>
+                    <label><input type="checkbox" name="property_type" value="apartment" {% if 'apartment' in selected_types %}checked{% endif %}> Apartment</label>
+                    <label><input type="checkbox" name="property_type" value="shop" {% if 'shop' in selected_types %}checked{% endif %}> Shop</label>
+                </div>
+            </div>
+        
+            <!-- Property Size -->
+            <div class="form-group">
+                <label>Size of Property</label>
+                <div class="checkbox-group">
+                    {% set selected_sizes = property['size'].split(',') %}
+                    <label><input type="checkbox" name="property_size" value="5-marla" {% if '5-marla' in selected_sizes %}checked{% endif %}> 5 Marla</label>
+                    <label><input type="checkbox" name="property_size" value="10-marla" {% if '10-marla' in selected_sizes %}checked{% endif %}> 10 Marla</label>
+                    <label><input type="checkbox" name="property_size" value="1-kanal" {% if '1-kanal' in selected_sizes %}checked{% endif %}> 1 Kanal</label>
+                    <label><input type="checkbox" name="property_size" value="2-kanal" {% if '2-kanal' in selected_sizes %}checked{% endif %}> 2 Kanal</label>
+                </div>
+            </div>
+        
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Enter updated description">{{ property.description }}</textarea>
+            </div>
+        
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Update Property</button>
+        </form>
+        
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+                <li><a href="{{ url_for('properties.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('properties.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('properties.terms') }}">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
+    <script>
+        // Delete Image Functionality
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const imageCard = button.closest('.image-card');
+                imageCard.remove();
+            });
+        });
+
+        // Upload New Image Functionality
+        const uploadInput = document.getElementById('upload-image');
+        const uploadCard = document.querySelector('.upload-card');
+
+        uploadInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const newImageCard = document.createElement('div');
+                    newImageCard.classList.add('image-card');
+                    newImageCard.innerHTML = `
+                        <img src="${e.target.result}" alt="New Property Image">
+                        <button class="btn delete-btn">Delete</button>
+                    `;
+                    uploadCard.insertAdjacentElement('beforebegin', newImageCard);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+
+        // ----------------Profile dropdown functionality
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+
+        // Toggle profile dropdown when clicking on profile icon
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from reaching document
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    </script>
+</body>
+</html>

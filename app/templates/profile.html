@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('properties.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo3.png') }}" alt="EaseEstate Logo">
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('properties.sale') }}">Buy</a></li>
+                <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('properties.post_sale') }}">Sell</a></li>
+                        <li><a href="{{ url_for('properties.add_rent') }}">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('properties.agents') }}">Agent</a></li>
+                <li><a href="{{ url_for('properties.blogs') }}">Blogs</a></li>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                    {% if user and user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                    {% endif %}
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                        {% if user and user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                        {% endif %}
+                           
+                        </li>
+                        <li><a href="{{ url_for('properties.profile') }}">My Profile</a></li>
+                        <li><a href="{{ url_for('properties.myproperties') }}">My Ads</a></li>
+                        <li><a href="{{ url_for('chat.inbox') }}">Inbox</a></li> 
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="profile-page">
+        <h1>My Profile</h1>
+
+        <!-- Profile Picture Section -->
+        <div class="profile-picture-section">
+            <div class="profile-picture">
+                {% if user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                {% endif %}
+            </div>
+            
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="personal-info-section">
+            <h2>Personal Information</h2>
+            <form class="personal-info-form" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" value="{{ user.username }}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" value="{{ user.phone }}">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" value="{{ user.address }}">
+                </div>
+                <div class="form-group">
+                    <label for="profile-pic">Profile Picture</label>
+                    <input type="file" id="profile-pic" name="profile-pic" accept="image/*">
+                </div>
+                <button type="submit" class="btn">Update Information</button>
+            </form>
+            
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+                <li><a href="{{ url_for('properties.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('properties.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('properties.terms') }}">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
+    <script>
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+    
+        profileDropdown.addEventListener('click', (e) => {
+          e.stopPropagation();
+          profileDropdown.classList.toggle('active');
+        });
+    
+        document.addEventListener('click', () => {
+          profileDropdown.classList.remove('active');
+        });
+    
+        profileMenu.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+        // Upload Profile Picture Functionality
+        const uploadInput = document.getElementById('upload-profile-pic');
+        const profilePicture = document.querySelector('.profile-picture img');
+
+        uploadInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    profilePicture.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        
+    </script>
+</body>
+</html>

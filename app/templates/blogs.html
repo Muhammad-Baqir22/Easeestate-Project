@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='blogs.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('properties.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo3.png') }}" alt="EaseEstate Logo">
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('properties.sale') }}">Buy</a></li>
+                <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('properties.post_sale') }}">Sell</a></li>
+                        <li><a href="{{ url_for('properties.add_rent') }}">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('properties.agents') }}">Agent</a></li>
+                <li><a href="{{ url_for('properties.blogs') }}">Blogs</a></li>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                    {% if user and user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                    {% endif %}
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                        {% if user and user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                        {% endif %}
+                           
+                        </li>
+                        <li><a href="{{ url_for('properties.profile') }}">My Profile</a></li>
+                        <li><a href="{{ url_for('properties.myproperties') }}">My Ads</a></li>
+                        <li><a href="{{ url_for('chat.inbox') }}">Inbox</a></li> 
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="blogs-page">
+        <h1>Property Blogs</h1>
+
+        <!-- Blog Section -->
+        <section class="blog-section">
+            <!-- Blog 1 -->
+            {% for blog in blogs %}
+            <div class="blog-card">
+                <img src="{{ url_for('static', filename='uploads/' ~ (blog['image_filename'] if blog['image_filename'] else 'default-image.jpg')) }}" alt="Blog Image">
+
+                <div class="blog-content">
+                    <h2>{{ blog['title'] }}</h2>
+                    <p class="blog-meta">Published by <strong>{{ blog['author'] }}</strong></p>
+                    <p>{{ blog['content'] }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </section>
+        <!-- Upload Blog Button -->
+<div class="upload-blog-section">
+    <button id="show-upload-form" class="btn">Upload New Blog</button>
+
+    <form id="upload-blog-form" action="{{ url_for('properties.blogs') }}" method="POST" enctype="multipart/form-data" style="display: none; margin-top: 20px;">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" required>
+
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" rows="5" required></textarea>
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+
+        <button type="submit" class="btn">Submit Blog</button>
+    </form>
+</div>
+
+
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+                <li><a href="{{ url_for('properties.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('properties.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('properties.terms') }}">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
+    <script>
+        // Messaging Functionality
+        const chatMessages = document.querySelector('.chat-messages');
+        const chatInput = document.getElementById('chat-input');
+
+        function sendMessage() {
+            const messageText = chatInput.value.trim();
+            if (messageText) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', 'user');
+                messageDiv.innerHTML = `<p>${messageText}</p>`;
+                chatMessages.appendChild(messageDiv);
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+            }
+        }
+
+        // ----------------Profile dropdown functionality
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+
+        // Toggle profile dropdown when clicking on profile icon
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from reaching document
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Toggle upload blog form
+const showUploadFormBtn = document.getElementById('show-upload-form');
+const uploadBlogForm = document.getElementById('upload-blog-form');
+
+showUploadFormBtn.addEventListener('click', () => {
+    if (uploadBlogForm.style.display === 'none') {
+        uploadBlogForm.style.display = 'block';
+        showUploadFormBtn.textContent = 'Hide Upload Form';
+    } else {
+        uploadBlogForm.style.display = 'none';
+        showUploadFormBtn.textContent = 'Upload New Blog';
+    }
+});
+
+    </script>
+</body>
+</html>

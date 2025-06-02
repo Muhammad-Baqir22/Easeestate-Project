@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EaseEstate: HomePage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='blogin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='img/logo3.png') }}">
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('auth.login') }}">Buy</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Sell</a></li>
+                <li><a href="{{ url_for('auth.login') }}">Rent</a></li>
+                <li><a href="#">Blogs</a></li>
+                <li><a href="#">About Us</a></li>
+            </ul>
+            
+            <div class="auth-buttons">
+                <a href="{{ url_for('auth.login') }}"><button class="btn">Log In</button></a>
+                <a href="{{ url_for('auth.register') }}"><button class="btn">Sign Up</button></a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <div class="search-container">
+            <div class="search-buttons">
+                <button class="btn active" id="buy-btn">Buy</button>
+                <button class="btn" id="rent-btn">Rent</button>
+            </div>
+
+            <!-- ✅ Updated search form for Flask -->
+            <form method="GET" action="{{ url_for('properties.search') }}">
+                <div class="search-bar">
+                    <input type="hidden" name="type" id="search-type" value="buy">
+                    <input type="text" name="location" placeholder="Enter location..." aria-label="Location" required>
+                    <select name="size" aria-label="Property Size">
+                        <option value="">Property Size</option>
+                        <option value="5-marla">5 Marla</option>
+                        <option value="10-marla">10 Marla</option>
+                        <option value="1-kanal">1 Kanal</option>
+                        <option value="2-kanal">2 Kanal</option>
+                    </select>
+                    <select name="type" aria-label="Property Type">
+                        <option value="">Property Type</option>
+                        <option value="house">House</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="shop">Shop</option>
+                        <option value="plot">Plot</option>
+                    </select>
+                    <button type="submit1" class="btn search-btn">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="featured-colonies">
+        <h2>Featured Colonies</h2>
+        <div class="colony-grid">
+            <div class="colony-card">
+                <img src="{{ url_for('static', filename='img/bahria.png') }}" alt="Bahria Town">
+                <p>Bahria Town</p>
+            </div>
+            <div class="colony-card">
+                <img src="{{ url_for('static', filename='img/DHA.jpeg') }}" alt="DHA">
+                <p>DHA</p>
+            </div>
+            <div class="colony-card">
+                <img src="{{ url_for('static', filename='img/gulberg.jpeg') }}" alt="Gulberg">
+                <p>Gulberg Green</p>
+            </div>
+            <div class="colony-card">
+                <img src="{{ url_for('static', filename='img/pvc.png') }}" alt="Park View City">
+                <p>Park View City</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
+    <script>
+        const buyBtn = document.getElementById('buy-btn');
+        const rentBtn = document.getElementById('rent-btn');
+
+        buyBtn.addEventListener('click', () => {
+            buyBtn.classList.add('active');
+            rentBtn.classList.remove('active');
+        });
+
+        rentBtn.addEventListener('click', () => {
+            rentBtn.classList.add('active');
+            buyBtn.classList.remove('active');
+        });
+
+        const searchType = document.getElementById('search-type');
+
+        buyBtn.addEventListener('click', () => {
+            buyBtn.classList.add('active');
+            rentBtn.classList.remove('active');
+            searchType.value = 'buy';
+        });
+
+        rentBtn.addEventListener('click', () => {
+            rentBtn.classList.add('active');
+            buyBtn.classList.remove('active');
+            searchType.value = 'rent';
+        });
+
+    </script>
+</body>
+</html>

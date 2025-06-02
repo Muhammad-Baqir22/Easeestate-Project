@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Property - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sell.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('properties.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo3.png') }}" alt="EaseEstate Logo">
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('properties.sale') }}">Buy</a></li>
+                <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('properties.post_sale') }}">Sell</a></li>
+                        <li><a href="{{ url_for('properties.add_rent') }}">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('properties.agents') }}">Agent</a></li>
+                <li><a href="{{ url_for('properties.blogs') }}">Blogs</a></li>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+                </div>
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                        <img src="{{ url_for('static', filename='img/profilelogo.png') }}" alt="Profile Icon">
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                            <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Profile Picture">
+                            <span>{{ user.username }}</span>
+                        </li>
+                        <li><a href="{{ url_for('properties.profile') }}">My Profile</a></li>
+                        <li><a href="{{ url_for('properties.myproperties') }}">My Ads</a></li>
+                        <li><a href="{{ url_for('chat.inbox') }}">Inbox</a></li> 
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="sell-page">
+        <h1>Enter Your Property Details</h1>
+        <form class="property-form" method="POST" enctype="multipart/form-data">
+            <!-- Title -->
+            <div class="form-group">
+                <label for="title">Property Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter property title" required>
+            </div>
+        
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Enter property description" required></textarea>
+            </div>
+        
+            <!-- Upload Images -->
+            <div class="form-group">
+                <label for="images">Upload Property Images</label>
+                <input type="file" id="images" name="images" accept="image/*" multiple required>
+            </div>
+        
+            <!-- Type of Property -->
+            <div class="form-group">
+                <label for="property-type">Type of Property</label>
+                <select name="property-type" id="property-type" required>
+                    <option value="house">House</option>
+                    <option value="apartment">Apartment</option>
+                    <option value="shop">Shop</option>
+                </select>
+            </div>
+        
+            <!-- Location -->
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" placeholder="Enter property location" required>
+            </div>
+        
+            <!-- Colony -->
+            <div class="form-group">
+                <label for="colony">Colony</label>
+                <input type="text" id="colony" name="colony" placeholder="Enter colony or area" required>
+            </div>
+        
+            <!-- Size of Property -->
+            <div class="form-group">
+                <label for="size">Size of Property</label>
+                <select name="size" id="size" required>
+                    <option value="5-marla">5 Marla</option>
+                    <option value="10-marla">10 Marla</option>
+                    <option value="1-kanal">1 Kanal</option>
+                    <option value="2-kanal">2 Kanal</option>
+                </select>
+            </div>
+        
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" id="price" name="price" placeholder="Enter property price" required>
+            </div>
+        
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Submit</button>
+        </form>
+        
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+                <li><a href="{{ url_for('properties.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('properties.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('properties.terms') }}">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
+    <script>
+        // ----------------Profile dropdown functionality
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+
+        // Toggle profile dropdown when clicking on profile icon
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from reaching document
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });     
+    </script>
+</body>
+</html>

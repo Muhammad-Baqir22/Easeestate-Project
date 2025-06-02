@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='buyDetails.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('properties.home') }}">
+                    <img src="{{ url_for('static', filename='img/logo3.png') }}" alt="EaseEstate Logo">
+                </a>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('properties.sale') }}">Buy</a></li>
+                <li><a href="{{ url_for('properties.rent') }}">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('properties.post_sale') }}">Sell</a></li>
+                        <li><a href="{{ url_for('properties.add_rent') }}">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('properties.agents') }}">Agent</a></li>
+                <li><a href="{{ url_for('properties.blogs') }}">Blogs</a></li>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+               
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                    {% if user and user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                    {% endif %}
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                        {% if user and user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ user.profile_image) }}" alt="Profile Picture">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/default-profile.png') }}" alt="Default Profile Picture">
+                        {% endif %}
+                           
+                        </li>
+                        <li><a href="{{ url_for('properties.profile') }}">My Profile</a></li>
+                        <li><a href="{{ url_for('properties.myproperties') }}">My Ads</a></li>
+                        <li><a href="{{ url_for('chat.inbox') }}">Inbox</a></li> 
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="property-details-page">
+        <div><h1 style="text-align: center;">Details of Property</h1></div>
+        <!-- Property Image Slider -->
+        <div class="property-slider">
+            <div class="slider">
+                {% if images and images|length > 0 %}
+                {% for image in images %}
+                <img src="{{ url_for('properties.uploaded_file', filename=image) }}"
+                     class="slide {% if loop.first %}active{% endif %}" 
+                     style="width: 100%; max-height: 400px; object-fit: cover;">
+            {% endfor %}
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/default-property.png') }}" alt="No Image Available"
+                         class="slide active" style="width: 100%; max-height: 400px; object-fit: cover;">
+                {% endif %}
+            </div>
+            {% if images and images|length > 1 %}
+                <button class="slider-btn prev" onclick="prevSlide()">&#10094;</button>
+                <button class="slider-btn next" onclick="nextSlide()">&#10095;</button>
+            {% endif %}
+        </div>
+        
+
+
+        <!-- Price -->
+        <!-- Price -->
+<div class="price-section">
+    <h2>${{ property.price }}</h2>
+</div>
+
+<!-- Property Details -->
+<div class="property-info">
+    <h3>Property Details</h3>
+    <div class="details-grid">
+        <div class="detail-item">
+            <span class="detail-label">Location:</span>
+            <span class="detail-value">{{ property.location }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Colony:</span>
+            <span class="detail-value">{{ property.colony }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Type:</span>
+            <span class="detail-value">{{ property.property_type }}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Size:</span>
+            <span class="detail-value">{{ property.size }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Property Description -->
+<div class="property-description">
+    <h3>Description</h3>
+    <p>{{ property.description }}</p>
+</div>
+
+
+        <!-- Messaging Box -->
+        <div class="messaging-box">
+            <h3>Message Seller</h3>
+            <div class="chat-box">
+                <div class="chat-messages">
+                    {% for message in messages %}
+                        <div class="message {% if message.sender_id == session['user_id'] %}buyer{% else %}seller{% endif %}">
+                            <strong>{{ message.sender_name }}:</strong>
+                            <p>{{ message.message }}</p>
+                            <small>{{ message.timestamp }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <form id="chat-form" class="chat-input">
+                    <input type="text" name="message" id="chat-input" placeholder="Type your message..." required>
+                    <button class="btn" type="submit">Send</button>
+                </form>
+                
+
+            </div>
+        </div>
+
+        <!-- Recommended Properties -->
+        <div class="recommended-properties">
+            <h3>Similar Properties</h3>
+            <div class="property-grid">
+                {% for similar in similar_properties %}
+                <div class="property-card">
+                    <img src="{{ url_for('properties.uploaded_file', filename=similar.image) }}" alt="Property Image">
+        
+                    <div class="property-details">
+                        <h3>{{ similar.size }} {{ similar.property_type }}</h3>
+                        <p><strong>Price:</strong> ${{ similar.price }}</p>
+                        <p><strong>City:</strong> {{ similar.location }}</p>
+                        <p><strong>Colony:</strong> {{ similar.colony }}</p>
+                    </div>
+                    <a href="{{ url_for('properties.property_details', property_id=similar.id) }}">
+                        <button class="btn view-details">View Details</button>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="{{ url_for('properties.about') }}">About Us</a></li>
+                <li><a href="{{ url_for('properties.contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('properties.privacy') }}">Privacy Policy</a></li>
+                <li><a href="{{ url_for('properties.terms') }}">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/facebook.png') }}" alt="Facebook">
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/insta.png') }}" alt="Instagram">
+            </a>
+            <a href="https://twitter.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/twitter.png') }}" alt="Twitter">
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+                <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="LinkedIn">
+            </a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='nav.js') }}"></script>
+    <script>
+        // Image Slider Functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Messaging Functionality
+        const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.querySelector('.chat-messages');
+
+    chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        fetch('{{ url_for("chat.send_message") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ session.get("_csrf_token") }}'
+            },
+            body: JSON.stringify({
+                property_id: {{ property.id }},
+                receiver_id: {{ property.owner_id }},
+                message: message
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                const div = document.createElement('div');
+                div.classList.add('message', 'buyer');
+                div.innerHTML = `<strong>You:</strong><p>${message}</p><small>Just now</small>`;
+                chatMessages.appendChild(div);
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        });
+    });
+
+        // Auto-generated message)
+        const autoMessage = document.querySelector('.message.seller');
+        let isAutoMessageShown = false;
+
+        chatInput.addEventListener('focus', () => {
+            if (!isAutoMessageShown) {
+                autoMessage.style.display = 'block';
+                isAutoMessageShown = true;
+            }
+        });
+
+        // ----------------Profile dropdown functionality
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+
+        // Toggle profile dropdown when clicking on profile icon
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent click from reaching document
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - EaseEstate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='addtocart.css') }}"> <!-- Using your existing CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="home.html"><img src="img/logo3.png" alt="EaseEstate Logo"></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="buy.html">Buy</a></li>
+                <li><a href="rent.html">Rent</a></li>
+                <li class="dropdown">
+                    <a href="#">Post an Ad <span>&#9660;</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="sell.html">Sell</a></li>
+                        <li><a href="rent.html">Rent</a></li>
+                    </ul>
+                </li>
+                <li><a href="agent.html">Agent</a></li>
+                <li><a href="blogs.html">Blogs</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="cart-icon">
+                    <a href="addtocart.html">
+                        <img src="img/cart.png" alt="Cart Icon">
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+                <div class="profile-dropdown">
+                    <div class="profile-icon">
+                        <img src="img/profilelogo.png" alt="Profile Icon">
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li class="profile-info">
+                            <img src="img/default-profile.png" alt="Profile Picture">
+                            <span>John Doe</span>
+                        </li>
+                        <li><a href="profile.html">My Profile</a></li>
+                        <li><a href="myproperty.html">My Ads</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="cart-page">
+        <h1>Your Cart</h1>
+
+        <!-- Cart Items Container -->
+        <div class="cart-items" id="cart-items-container">
+            <!-- Items will be dynamically inserted here -->
+        </div>
+
+        <!-- Checkout Section -->
+        <div class="checkout-section" id="checkout-section">
+            <h2>Checkout</h2>
+            <div class="checkout-details">
+                <p><strong>Total Items:</strong> <span id="total-items">0</span></p>
+                <p><strong>Total Price:</strong> $<span id="total-price">0</span></p>
+                <button class="btn checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <ul>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <a href="https://facebook.com" target="_blank"><img src="img/facebook.png" alt="Facebook"></a>
+            <a href="https://instagram.com" target="_blank"><img src="img/insta.png" alt="Instagram"></a>
+            <a href="https://twitter.com" target="_blank"><img src="img/twitter.png" alt="Twitter"></a>
+            <a href="https://linkedin.com" target="_blank"><img src="img/linkedin.png" alt="LinkedIn"></a>
+        </div>
+        <p>&copy; 2023 EaseEstate. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Hardcoded cart data (will be replaced with database fetch later)
+        const cartItems = [
+            {
+                id: 1,
+                title: "5 Marla House",
+                price: 100000,
+                location: "Lahore, DHA",
+                type: "House",
+                size: "5 Marla",
+                image: "img/property1.jpg"
+            },
+            {
+                id: 2,
+                title: "10 Marla Plot",
+                price: 150000,
+                location: "Islamabad, Bahria Town",
+                type: "Plot",
+                size: "10 Marla",
+                image: "img/property2.jpg"
+            }
+        ];
+
+        // DOM Elements
+        const cartContainer = document.getElementById('cart-items-container');
+        const totalItemsElement = document.getElementById('total-items');
+        const totalPriceElement = document.getElementById('total-price');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const cartCountElement = document.querySelector('.cart-count');
+
+        // Render cart items
+        function renderCartItems() {
+            cartContainer.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="no-properties">
+                        <img src="img/X.png" alt="Empty cart">
+                        <h3>Your Cart is Empty</h3>
+                        <p>You haven't added any properties to your cart yet. <a href="buy.html">Browse properties</a></p>
+                    </div>
+                `;
+                document.getElementById('checkout-section').style.display = 'none';
+                return;
+            }
+
+            cartItems.forEach(item => {
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.dataset.id = item.id;
+
+                cartItemElement.innerHTML = `
+                    <img src="${item.image}" alt="Property Image">
+                    <div class="cart-item-details">
+                        <h3>${item.title}</h3>
+                        <p><strong>Price:</strong> $${item.price.toLocaleString()}</p>
+                        <p><strong>Location:</strong> ${item.location}</p>
+                        <p><strong>Type:</strong> ${item.type}</p>
+                        <p><strong>Size:</strong> ${item.size}</p>
+                    </div>
+                    <button class="btn remove-btn" data-id="${item.id}">Remove</button>
+                `;
+
+                cartContainer.appendChild(cartItemElement);
+            });
+
+            updateCartSummary();
+        }
+
+        // Update cart summary (total items and price)
+        function updateCartSummary() {
+            const totalItems = cartItems.length;
+            const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+
+            totalItemsElement.textContent = totalItems;
+            totalPriceElement.textContent = totalPrice.toLocaleString();
+            cartCountElement.textContent = totalItems;
+        }
+
+        // Remove item from cart
+        function removeItem(itemId) {
+            const index = cartItems.findIndex(item => item.id === itemId);
+            if (index !== -1) {
+                cartItems.splice(index, 1);
+                renderCartItems();
+            }
+        }
+
+        // Event delegation for remove buttons
+        cartContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-btn')) {
+                const itemId = parseInt(e.target.dataset.id);
+                removeItem(itemId);
+            }
+        });
+
+        // Checkout button handler
+        checkoutBtn.addEventListener('click', () => {
+            alert('Checkout functionality will be implemented later with payment processing.');
+            // In future, this will redirect to checkout page
+        });
+
+        // ----------------Profile dropdown functionality
+        const profileDropdown = document.querySelector('.profile-dropdown');
+        const profileMenu = profileDropdown.querySelector('.dropdown-menu');
+
+        // Toggle profile dropdown when clicking on profile icon
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            profileDropdown.classList.remove('active');
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Initialize the cart on page load
+        renderCartItems();
+    </script>
+</body>
+</html>

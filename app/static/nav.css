@@ -1,0 +1,124 @@
+/* ---------------------------------------------navbar ----------------------------------- */
+/* ==================== RESPONSIVE NAVBAR ==================== */
+/* Mobile Menu Toggle */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text-color);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 992px) {
+    nav {
+        flex-wrap: wrap;
+        padding: 10px 20px;
+    }
+    
+    .logo img {
+        width: 100px;
+        height: auto;
+        margin: 0;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        background-color: var(--main-bg-color);
+        position: absolute;
+        top: 80px;
+        left: 0;
+        padding: 20px 0;
+        z-index: 1000;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-links li {
+        margin: 10px 20px;
+        text-align: center;
+    }
+    
+    .auth-buttons {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+    }
+    
+    .auth-buttons.active {
+        display: flex;
+    }
+    
+    .auth-buttons .btn {
+        margin: 5px 0;
+        width: 80%;
+    }
+}
+
+/* Smaller screens adjustments */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-bar input, 
+    .search-bar select {
+        width: 100%;
+    }
+    
+    .search-bar .search-btn {
+        width: 100%;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .logo img {
+        width: 80px;
+    }
+    
+    .hero {
+        height: 60vh;
+    }
+    
+    .search-container {
+        padding: 15px;
+        width: 90%;
+    }
+    
+    .search-buttons .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .colony-card {
+        width: 100%;
+    }
+    
+    .colony-card img {
+        width: 100%;
+        height: auto;
+    }
+}
