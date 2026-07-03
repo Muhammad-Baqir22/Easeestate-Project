@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Poppins:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ─── Brand design tokens ────────────────────────────────── */
+@theme {
+  --color-navy:        #0B1829;
+  --color-navy-light:  #162338;
+  --color-navy-mid:    #1E3A5F;
+  --color-gold:        #C8952A;
+  --color-gold-bright: #FFD93D;
+  --color-surface:     #F7F9FC;
+  --color-surface-2:   #EEF1F6;
+  --color-border-c:    #DDE3EC;
+  --color-ink:         #0F1923;
+  --color-slate:       #3D4F63;
+  --color-muted:       #7A8FA6;
+  --color-red-err:     #E53E3E;
+
+  --font-sans:    'Lato', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+}
+
+/* ─── Base reset ─────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: theme(--color-slate);
+    background: #fff;
+    line-height: 1.65;
+  }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+  button { cursor: pointer; font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
+}
+
+/* ─── Component classes (used by JSX classNames) ─────────── */
+@layer components {
+
+  /* ─── Buttons ─── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: theme(--color-gold-bright);
+    color: theme(--color-navy);
+    padding: 10px 22px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(.4,0,.2,1);
+    letter-spacing: 0.02em;
+    user-select: none;
+  }
+  .btn:hover {
+    background: #f0cd30;
+    box-shadow: 0 4px 14px rgba(255,217,61,0.38);
+    transform: translateY(-1px);
+  }
+  .btn:active { transform: translateY(0); }
+
+  /* ─── Form field ─── */
+  .field {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1.5px solid theme(--color-border-c);
+    border-radius: 10px;
+    font-size: 15px;
+    color: theme(--color-ink);
+    background: theme(--color-surface);
+    outline: none;
+    transition: all 0.2s;
+  }
+  .field:focus {
+    border-color: theme(--color-navy-mid);
+    box-shadow: 0 0 0 3px rgba(30,58,95,0.10);
+    background: #fff;
+  }
+
+  /* ─── Form label ─── */
+  .label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 700;
+    color: theme(--color-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 7px;
+  }
+
+  /* ─── Card base ─── */
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid theme(--color-border-c);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: transform 0.22s, box-shadow 0.22s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  }
+}
+
+/* ─── Animations ─────────────────────────────────────────── */
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-drop { animation: drop-in 0.18s ease; }
+
+/* ─── Slider ─────────────────────────────────────────────── */
+.slider-img { display: none; width: 100%; max-height: 440px; object-fit: cover; }
+.slider-img.active { display: block; }
+
+/* ─── Chat messages ──────────────────────────────────────── */
+.chat-messages {
+  height: 280px;
+  overflow-y: auto;
+  padding: 18px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Checkbox accent ────────────────────────────────────── */
+input[type="checkbox"], input[type="radio"] {
+  accent-color: theme(--color-navy);
+}
+
+/* ─── Line-clamp ─────────────────────────────────────────── */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

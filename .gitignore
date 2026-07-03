@@ -1,0 +1,31 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Database
+*.db
+*.sqlite3
+
+# Uploads (user-generated content)
+app/static/uploads/*
+!app/static/uploads/.gitkeep
+
+# Environment
+.env
+.env.local
+
+# Frontend (handled by frontend/.gitignore too)
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
